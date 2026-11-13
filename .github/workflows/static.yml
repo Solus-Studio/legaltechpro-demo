@@ -1,0 +1,40 @@
+name: Deploy Legal Technology demo
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/configure-pages@v5
+      - name: Extract the verified static files
+        run: |
+          echo '0c2a425e2403095b903d6fe497c69fb4ff3156e383d64f8801ef892a4dbba6f8  legaltechpro-pages-static.zip' | sha256sum --check
+          unzip -q legaltechpro-pages-static.zip -d _site
+          test -f _site/.nojekyll
+          test -f _site/404.html
+          test -f _site/en/index.html
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+          include-hidden-files: true
+      - uses: actions/deploy-pages@v4
+        id: deployment
