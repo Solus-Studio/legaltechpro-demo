@@ -27,7 +27,7 @@ jobs:
       - uses: actions/configure-pages@v5
       - name: Extract the verified static files
         run: |
-          echo '0c2a425e2403095b903d6fe497c69fb4ff3156e383d64f8801ef892a4dbba6f8  legaltechpro-pages-static.zip' | sha256sum --check
+          echo '866a1375cc492eebfbdffa74da2da5be601e46ed50502e48e86c8d5df6233b46  legaltechpro-pages-static.zip' | sha256sum --check
           unzip -q legaltechpro-pages-static.zip -d _site
           test -f _site/.nojekyll
           test -f _site/404.html
